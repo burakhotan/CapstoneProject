@@ -123,13 +123,13 @@ for item in a:
 df_2 = pd.get_dummies(df,drop_first=False)
 
 ## Data Sampling
-rows = Y.sample(frac =.010) 
+rows = df_2.sample(frac =.010) 
 
 
 ## Feature Selection Boruta
 
-sonar_x = Y.iloc[:,0:20].values.astype(int)
-sonar_y = Y.iloc[:,-1].values.ravel().astype(int)
+sonar_x = df_2.iloc[:,0:61].values.astype(int)
+sonar_y = df_2.iloc[:,62:].values.ravel().astype(int)
 
 
 
