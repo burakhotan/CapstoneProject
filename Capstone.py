@@ -2,8 +2,16 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from xgboost import XGBClassifier
 pd.set_option('display.max_columns', None)
-
 
 
 import warnings
@@ -106,18 +114,6 @@ df[df['Cost Matrix(Risk)'] == "Bad Risk"][cat_vars[0:-1]].hist(bins = 25,
 num_vars = df.iloc[:,[1,4,7,10,12,15,17]].values
 
 
-
-##Label Encoding
-import pandas as pd
-a = [0,2,3,5,6,8,9,11,13,14,16,18,19,20]
-X = df.iloc[:,0:21].values
-from sklearn.preprocessing import LabelEncoder 
-labelencoder_X = LabelEncoder()
-
-
-for item in a:
-    X[:,item] =labelencoder_X.fit_transform(X[:,item])
-    Y = pd.DataFrame(X)
     
 #OneHotEncoding
 df_2 = pd.get_dummies(df,drop_first=False)
@@ -136,22 +132,82 @@ sonar_y = df_2.iloc[:,62:].values.ravel().astype(int)
 from boruta import BorutaPy
 from sklearn.ensemble import RandomForestClassifier
 
-rf = RandomForestClassifier(n_jobs=-1, class_weight='balanced', max_depth=5)
+rf = RandomForestClassifier(n_jobs=-1, max_depth=10)
 
-boruta_feature_selector = BorutaPy(rf,n_estimators='auto',perc = 90,random_state=111)
+boruta_feature_selector = BorutaPy(rf,n_estimators='auto',perc = 90,random_state=0)
 
 boruta_feature_selector.fit(sonar_x,sonar_y)
 
 boruta_feature_selector.support_
 boruta_feature_selector.ranking_
 
+sonar_x_selected = sonar_x[:,[0,1,2,3,4,7,8,10,12,28,48,51]]
+
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split,KFold,cross_val_score
+
+x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.33,random_state=0)
+
+folds = KFold(n_splits = 3, shuffle = False, random_state = 0)
+scores = []
+
+for n_fold, (train_index, valid_index) in enumerate(folds.split(sonar_x_selected,sonar_y)):
+    # print('\n Fold '+ str(n_fold+1 ) + 
+    #       ' \n\n train ids :' +  str(train_index) +
+    #       ' \n\n validation ids :' +  str(valid_index))
+    
+    x_train, x_valid = sonar_x_selected[train_index], sonar_x_selected[valid_index]
+    y_train, y_valid = sonar_y[train_index], sonar_y[valid_index]
+    
+    rf.fit(x_train, y_train)
+    y_pred = rf.predict(x_valid)
+    
+    
+    acc_score = accuracy_score(y_pred, y_valid)
+    scores.append(acc_score)
+    print('\n Accuracy score for Fold ' +str(n_fold+1) + ' --> ' + str(acc_score)+'\n')
+
+    
+print(scores)
+print('Avg. accuracy score :' + str(np.mean(scores)))
 
 
 
 
+scores = cross_val_score(rf, sonar_x_selected, sonar_y, cv=3)
 
+print("Avg. cross val score: "+str(scores.mean()))
 
+x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.33,random_state=0)
+seed = 0
 
+models = []
+models.append(('LR', LogisticRegression()))
+models.append(('LDA', LinearDiscriminantAnalysis()))
+models.append(('KNN', KNeighborsClassifier()))
+models.append(('DT', DecisionTreeClassifier()))
+models.append(('NB', GaussianNB()))
+models.append(('RF', RandomForestClassifier()))
+models.append(('SVM', SVC(gamma='auto')))
+models.append(('XGB', XGBClassifier()))
 
+# evaluate each model in turn
+results = []
+names = []
+scoring = 'accuracy'
 
-
+for name, model in models:
+        kfold = KFold(n_splits=3, random_state=seed,shuffle=False)
+        cv_results = cross_val_score(model, x_train, y_train, cv=kfold, scoring=scoring)
+        results.append(cv_results)
+        names.append(name)
+        msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
+        print(msg)
+        
+# boxplot algorithm comparison
+fig = plt.figure(figsize=(11,6))
+fig.suptitle('Algorithm Comparison')
+ax = fig.add_subplot(111)
+plt.boxplot(results)
+ax.set_xticklabels(names)
+plt.show()
