@@ -211,3 +211,15 @@ ax = fig.add_subplot(111)
 plt.boxplot(results)
 ax.set_xticklabels(names)
 plt.show()
+
+
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
+
+X_new = SelectKBest(chi2, k=12).fit(sonar_x ,sonar_y)
+
+X_new.scores_
+X_new.get_support()
+
+
+
