@@ -221,5 +221,25 @@ X_new = SelectKBest(chi2, k=12).fit(sonar_x ,sonar_y)
 X_new.scores_
 X_new.get_support()
 
+sonar_x_chiSelected = sonar_x[:,[0,1,4,7,8,10,11,12,15,28,30,46]]
+
+xchi_train,xchi_test,ychi_train,ychi_test=train_test_split(sonar_x_chiSelected,sonar_y,test_size=0.33,random_state=0)
+
+
+for name, model in models:
+        kfold = KFold(n_splits=3, random_state=seed,shuffle=False)
+        cv_results = cross_val_score(model, xchi_train, ychi_train, cv=kfold, scoring=scoring)
+        results.append(cv_results)
+        names.append(name)
+        msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
+        print(msg)
+        
+# boxplot algorithm comparison
+fig = plt.figure(figsize=(11,6))
+fig.suptitle('Algorithm Comparison')
+ax = fig.add_subplot(111)
+plt.boxplot(results)
+ax.set_xticklabels(names)
+plt.show()
 
 
