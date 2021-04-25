@@ -22,6 +22,7 @@ from keras.models import Sequential
 from keras.layers import Dense 
 
 
+
 pd.set_option('display.max_columns', None)
 
 
@@ -88,9 +89,6 @@ df = df.sample(frac=1).reset_index(drop=True)
 #OneHotEncoding
 df_2 = pd.get_dummies(df,drop_first=False)
 
-## Data Sampling
-rows = df_2.sample(frac =.010) 
-
 
 ## Feature Selection Boruta
 
@@ -129,10 +127,10 @@ classifier.add(Dense(7 ,kernel_initializer='uniform',activation='relu'))
 
 classifier.add(Dense(1 ,kernel_initializer='uniform',activation='sigmoid'))
 
-
 classifier.compile(optimizer='adam',loss= 'binary_crossentropy', metrics= ['accuracy'])
 
 history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=50)
 nn_pred=classifier.predict(X_test)
 
 nn_pred=(nn_pred > 0.5)
+
