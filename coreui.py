@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtGui import QIntValidator
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QMainWindow
-from sonHal6 import Ui_MainWindow
+from sonHal10 import Ui_MainWindow
 
 class MainWindow:
     def __init__(self):
@@ -56,8 +56,8 @@ class MainWindow:
         self.ui.checkBox_6.setChecked(False)
         self.ui.checkBox_7.setChecked(False)
         self.ui.checkBox_8.setChecked(False)
-        self.ui.frame.setStyleSheet("background-color:rgb(255, 0, 0)")
-        self.ui.label_6.setText("Bad Risk")
+        # self.ui.frame.setStyleSheet("background-color:rgb(255, 0, 0)")
+        # self.ui.label_6.setText("Bad Risk")
         
         
     def machineCalculate(self,val_duration,val_credit,val_dispIncome,val_residence,val_age,valrad_0to200,valrad_smaller0,valrad_nocheck,valcheck_critical,valcheck_smaller100,valcheck_other,valcheck_housingown):
@@ -202,8 +202,14 @@ class MainWindow:
         
         tahmin=sc.fit_transform(tahmin)
         
-        print(classifier.predict_classes(tahmin))
+        print(classifier.predict_classes(tahmin)[0][0])
         
+        if classifier.predict_classes(tahmin)[0][0] ==0:
+            self.ui.frame.setStyleSheet("background-color:qlineargradient(spread:pad, x1:0.523, y1:0, x2:0.534, y2:1, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(183, 0, 0, 255))")
+            self.ui.label_6.setText("bad risk")
+        else:
+            self.ui.frame.setStyleSheet("background-color:qlineargradient(spread:pad, x1:1, y1:0.511545, x2:1, y2:0.046, stop:0 rgba(0, 58, 11, 255), stop:1 rgba(20, 30, 29, 255))")
+            self.ui.label_6.setText("good risk")
         
         
         
@@ -254,6 +260,7 @@ class MainWindow:
             valcheck_critical=0
         print(valcheck_critical)
         self.machineCalculate(val_duration,val_credit,val_dispIncome,val_residence,val_age,valrad_0to200,valrad_smaller0,valrad_nocheck,valcheck_critical,valcheck_smaller100,valcheck_other,valcheck_housingown)
+        
 
 if __name__ == '__main__':
     app=QApplication(sys.argv)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'sonHal6.ui'
+# Form implementation generated from reading ui file 'sonHal10.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.2
 #
@@ -52,7 +52,7 @@ class Ui_MainWindow(object):
         self.label.setAutoFillBackground(False)
         self.label.setStyleSheet("color:rgb(255, 255, 255);\n"
 "font: 12pt \"MS Shell Dlg 2\";\n"
-"background-color:rgb(18, 32, 28)\n"
+"background-color:transparent;\n"
 "")
         self.label.setObjectName("label")
         self.radioButton_4 = QtWidgets.QRadioButton(self.frame)
@@ -79,7 +79,7 @@ class Ui_MainWindow(object):
         self.radioButton.setObjectName("radioButton")
         self.label_6 = QtWidgets.QLabel(self.frame)
         self.label_6.setEnabled(True)
-        self.label_6.setGeometry(QtCore.QRect(70, 420, 211, 141))
+        self.label_6.setGeometry(QtCore.QRect(230, 430, 211, 141))
         font = QtGui.QFont()
         font.setPointSize(26)
         font.setBold(True)
@@ -87,6 +87,7 @@ class Ui_MainWindow(object):
         self.label_6.setFont(font)
         self.label_6.setStyleSheet("background-color:transparent;\n"
 "color:#ffffff")
+        self.label_6.setText("")
         self.label_6.setObjectName("label_6")
         self.label_2 = QtWidgets.QLabel(self.frame)
         self.label_2.setGeometry(QtCore.QRect(30, 160, 131, 31))
@@ -100,25 +101,25 @@ class Ui_MainWindow(object):
         self.label_2.setAutoFillBackground(False)
         self.label_2.setStyleSheet("color:rgb(255, 255, 255);\n"
 "font: 12pt \"MS Shell Dlg 2\";\n"
-"background-color:rgb(18, 32, 28)\n"
+"background-color:transparent;\n"
 "")
         self.label_2.setObjectName("label_2")
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.frame)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 230, 301, 80))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.radioButton_5 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
-        self.radioButton_5.setStyleSheet("color:rgb(255, 255, 255);\n"
-"background-color:transparent")
-        self.radioButton_5.setObjectName("radioButton_5")
-        self.verticalLayout.addWidget(self.radioButton_5)
-        self.radioButton_6 = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.frame_2 = QtWidgets.QFrame(self.frame)
+        self.frame_2.setGeometry(QtCore.QRect(40, 200, 341, 80))
+        self.frame_2.setStyleSheet("background-color:transparent;")
+        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_2.setObjectName("frame_2")
+        self.radioButton_6 = QtWidgets.QRadioButton(self.frame_2)
+        self.radioButton_6.setGeometry(QtCore.QRect(10, 50, 299, 17))
         self.radioButton_6.setStyleSheet("color:rgb(255, 255, 255);\n"
 "background-color:transparent")
         self.radioButton_6.setObjectName("radioButton_6")
-        self.verticalLayout.addWidget(self.radioButton_6)
+        self.radioButton_5 = QtWidgets.QRadioButton(self.frame_2)
+        self.radioButton_5.setGeometry(QtCore.QRect(10, 20, 299, 17))
+        self.radioButton_5.setStyleSheet("color:rgb(255, 255, 255);\n"
+"background-color:transparent")
+        self.radioButton_5.setObjectName("radioButton_5")
         self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
         self.stackedWidget.setGeometry(QtCore.QRect(430, -10, 611, 641))
         self.stackedWidget.setObjectName("stackedWidget")
@@ -228,12 +229,11 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Feature Selection Algorithms"))
         self.radioButton_4.setText(_translate("MainWindow", "Boruta"))
         self.radioButton_3.setText(_translate("MainWindow", "Chi-Square"))
-        self.radioButton_2.setText(_translate("MainWindow", "Relief Based"))
-        self.radioButton.setText(_translate("MainWindow", "Logistic Reg."))
-        self.label_6.setText(_translate("MainWindow", "good risk"))
+        self.radioButton_2.setText(_translate("MainWindow", "Algorithm 1"))
+        self.radioButton.setText(_translate("MainWindow", "Algorithm 2"))
         self.label_2.setText(_translate("MainWindow", "ML Algorithms"))
-        self.radioButton_5.setText(_translate("MainWindow", "Neural Networks (Proposed)"))
         self.radioButton_6.setText(_translate("MainWindow", "Random Forest"))
+        self.radioButton_5.setText(_translate("MainWindow", "Neural Networks (Proposed)"))
         self.label_10.setText(_translate("MainWindow", "CHİ SQUARE TEMPLATE"))
         self.label_12.setText(_translate("MainWindow", "LOGISTIC REGRESSION TEMPLATE"))
         self.label_11.setText(_translate("MainWindow", "RELIEF BASED TEMPLATE"))

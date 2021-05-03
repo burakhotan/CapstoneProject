@@ -174,7 +174,7 @@ scoring = 'accuracy'
 
 for name, model in models:
         kfold = KFold(n_splits=3, random_state=seed,shuffle=False)
-        cv_results = cross_val_score(model, x_train, y_train, cv=kfold, scoring=scoring)
+        cv_results = cross_val_score(model, X_train, y_train, cv=kfold, scoring=scoring)
         results.append(cv_results)
         names.append(name)
         msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
@@ -248,22 +248,3 @@ cm= confusion_matrix(y_test,nn_pred)
 print(cm)
 
 
-from matplotlib import pyplot as plt
-
-plt.figure(figsize=(14,3))
-plt.subplot(1, 2, 1)
-plt.plot(history.history['accuracy'])
-plt.plot(history.history['val_accuracy'])
-plt.title('Model accuracy')
-plt.ylabel('Accuracy')
-plt.xlabel('Epoch')
-plt.legend(['Train', 'Test'], loc='upper left')
-
-plt.subplot(1, 2, 2)
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('Model loss')
-plt.ylabel('Loss')
-plt.xlabel('Epoch')
-plt.legend(['Train', 'Test'], loc='upper left')
-plt.show()

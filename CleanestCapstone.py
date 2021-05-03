@@ -101,7 +101,7 @@ sonar_x_selected = sonar_x[:,[0,1,2,3,4,7,8,10,12,28,48,51]]
 
 
 #Train/Test Split
-x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.33,random_state=0)
+x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.20,random_state=0)
 
 #Dataset Balancing
 smt = SMOTE()
@@ -134,3 +134,22 @@ nn_pred=classifier.predict(X_test)
 
 nn_pred=(nn_pred > 0.5)
 
+from matplotlib import pyplot as plt
+
+plt.figure(figsize=(14,3))
+plt.subplot(1, 2, 1)
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('Model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+
+plt.subplot(1, 2, 2)
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
