@@ -25,10 +25,7 @@ class MainWindow:
         self.ui.lineEdit_3.setValidator(QIntValidator())
         self.ui.lineEdit_4.setValidator(QIntValidator())
         self.ui.lineEdit_5.setValidator(QIntValidator())
-        #value = int(self.le.text()) accessing value
-        #val_age= int(self.ui.lineEdit.text())
-        #print(val_age)
-
+        
 
 
     def show(self):
@@ -56,9 +53,7 @@ class MainWindow:
         self.ui.checkBox_6.setChecked(False)
         self.ui.checkBox_7.setChecked(False)
         self.ui.checkBox_8.setChecked(False)
-        # self.ui.frame.setStyleSheet("background-color:rgb(255, 0, 0)")
-        # self.ui.label_6.setText("Bad Risk")
-        
+      
         
     def machineCalculate(self,val_duration,val_credit,val_dispIncome,val_residence,val_age,valrad_0to200,valrad_smaller0,valrad_nocheck,valcheck_critical,valcheck_smaller100,valcheck_other,valcheck_housingown):
         import numpy as np
