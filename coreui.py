@@ -169,10 +169,10 @@ class MainWindow:
         
         #Dataset Balancing
         smt = SMOTE()
-        x_train, y_train = smt.fit_sample(x_train, y_train)
+        x_train, y_train = smt.fit_resample(x_train, y_train)
         y_train = y_train.astype(int)
         
-        x_test, y_test = smt.fit_sample(x_test, y_test)
+        x_test, y_test = smt.fit_resample(x_test, y_test)
         y_test = y_test.astype(int)
         
         #Standard Scaling
@@ -193,7 +193,7 @@ class MainWindow:
         
         classifier.compile(optimizer='adam',loss= 'binary_crossentropy', metrics= ['accuracy'])
         
-        history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=50)
+        classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=25)
         nn_pred=classifier.predict(X_test)
         
         nn_pred=(nn_pred > 0.5)
