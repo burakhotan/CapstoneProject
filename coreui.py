@@ -63,22 +63,23 @@ class MainWindow:
     def machineCalculate(self,val_duration,val_credit,val_dispIncome,val_residence,val_age,valrad_0to200,valrad_smaller0,valrad_nocheck,valcheck_critical,valcheck_smaller100,valcheck_other,valcheck_housingown):
         import numpy as np
         import pandas as pd
-        import seaborn as sns
-        import matplotlib.pyplot as plt
-        from sklearn.ensemble import RandomForestClassifier
-        from sklearn.linear_model import LogisticRegression
-        from sklearn.tree import DecisionTreeClassifier
-        from sklearn.neighbors import KNeighborsClassifier
-        from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-        from sklearn.naive_bayes import GaussianNB
-        from sklearn.svm import SVC
-        from xgboost import XGBClassifier
-        from boruta import BorutaPy
-        from sklearn.metrics import accuracy_score
-        from sklearn.model_selection import train_test_split,KFold,cross_val_score
+        # import seaborn as sns
+        # import matplotlib.pyplot as plt
+        # from sklearn.ensemble import RandomForestClassifier
+        # from sklearn.linear_model import LogisticRegression
+        # from sklearn.tree import DecisionTreeClassifier
+        # from sklearn.neighbors import KNeighborsClassifier
+        # from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+        # from sklearn.naive_bayes import GaussianNB
+        # from sklearn.svm import SVC
+        # from xgboost import XGBClassifier
+        # from boruta import BorutaPy
+        # from sklearn.metrics import accuracy_score
+        from sklearn.model_selection import train_test_split
+        # KFold,cross_val_score
         from sklearn.preprocessing import StandardScaler
-        from sklearn.feature_selection import SelectKBest
-        from sklearn.feature_selection import chi2
+        # from sklearn.feature_selection import SelectKBest
+        # from sklearn.feature_selection import chi2
         from imblearn.over_sampling import SMOTE
         import keras
         from keras.models import Sequential
@@ -164,7 +165,7 @@ class MainWindow:
         
         
         #Train/Test Split
-        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.33,random_state=0)
+        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.2,random_state=0)
         
         #Dataset Balancing
         smt = SMOTE()
@@ -202,7 +203,6 @@ class MainWindow:
         
         tahmin=sc.fit_transform(tahmin)
         
-        print(classifier.predict_classes(tahmin)[0][0])
         
         if classifier.predict_classes(tahmin)[0][0] ==0:
             self.ui.frame.setStyleSheet("background-color:qlineargradient(spread:pad, x1:0.523, y1:0, x2:0.534, y2:1, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(183, 0, 0, 255))")
@@ -224,41 +224,41 @@ class MainWindow:
             valrad_0to200=1
         else:
             valrad_0to200=0
-        print(valrad_0to200)
+        
         if(self.ui.radioButton_9.isChecked()):
             valrad_smaller0=1
         else:
             valrad_smaller0=0
-        print(valrad_smaller0)
+        
         if(self.ui.radioButton_8.isChecked()):
             valrad_nocheck=1
         else:
             valrad_nocheck=0
-        print(valrad_nocheck)
+        
         ###################################################################☼
         if(self.ui.checkBox_6.isChecked()):
             valcheck_smaller100=1
         else:
             valcheck_smaller100=0
-        print(valcheck_smaller100)
+        
         
         if(self.ui.checkBox_7.isChecked()):
             valcheck_housingown=1
         else:
             valcheck_housingown=0
-        print(valcheck_housingown)
+        
         
         if(self.ui.checkBox_8.isChecked()):
             valcheck_other=1
         else:
             valcheck_other=0
-        print(valcheck_other)
+        
         
         if(self.ui.checkBox_9.isChecked()):
             valcheck_critical=1
         else:
             valcheck_critical=0
-        print(valcheck_critical)
+        
         self.machineCalculate(val_duration,val_credit,val_dispIncome,val_residence,val_age,valrad_0to200,valrad_smaller0,valrad_nocheck,valcheck_critical,valcheck_smaller100,valcheck_other,valcheck_housingown)
         
 
