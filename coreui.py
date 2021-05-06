@@ -171,18 +171,20 @@ class MainWindow:
 
         classifier.compile(optimizer='adam',loss= 'binary_crossentropy', metrics= ['accuracy'])
         
-        history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=45)
+        classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=45)
         nn_pred=classifier.predict(X_test)
         
         nn_pred=(nn_pred > 0.5)
         
         
         tahmin = np.array([val_duration,val_credit,val_dispIncome,val_residence,val_age,valrad_0to200,valrad_smaller0,valrad_nocheck,valcheck_critical,valcheck_smaller100,valcheck_other,valcheck_housingown]).reshape(1,12)
+        print(tahmin)
+        tahmin=sc.transform(tahmin)
+        print(tahmin)
+        classifier.predict_classes(tahmin)
+        print(classifier.predict_classes(tahmin)[0][0])
         
-        tahmin=sc.fit_transform(tahmin)
-        #print(np.argmax(classifier.predict(tahmin),axis=-1))
-        
-        if np.argmax(classifier.predict(tahmin),axis=-1)[0] ==0:
+        if classifier.predict_classes(tahmin)[0][0] ==0:
             self.ui.frame.setStyleSheet("background-color:qlineargradient(spread:pad, x1:0.523, y1:0, x2:0.534, y2:1, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(183, 0, 0, 255))")
             self.ui.label_6.setText("bad risk")
         else:
