@@ -20,7 +20,7 @@ from imblearn.over_sampling import SMOTE
 import keras
 from keras.models import Sequential
 from keras.layers import Dense 
-
+from keras.layers.core import Dropout
 
 
 pd.set_option('display.max_columns', None)
@@ -84,7 +84,7 @@ df["foreign worker"]=df["foreign worker"].map(foreign_worker)
 risk={1:"Good Risk", 2:"Bad Risk"}
 df["Cost Matrix(Risk)"]=df["Cost Matrix(Risk)"].map(risk)
 
-df = df.sample(frac=1).reset_index(drop=True)
+#df = df.sample(frac=1).reset_index(drop=True)
 
 #OneHotEncoding
 df_2 = pd.get_dummies(df,drop_first=False)
@@ -101,7 +101,7 @@ sonar_x_selected = sonar_x[:,[0,1,2,3,4,7,8,10,12,28,48,51]]
 
 
 #Train/Test Split
-x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.20,random_state=0)
+x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.2,random_state=0)
 
 #Dataset Balancing
 smt = SMOTE()
@@ -121,15 +121,15 @@ X_test=sc.fit_transform(x_test)
 #Neural Network
 
 classifier = Sequential()
-classifier.add(Dense(7 ,kernel_initializer='uniform',activation='relu',input_dim=12))
-
+classifier.add(Dense(7 ,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
+classifier.add(Dropout(0.5))
 classifier.add(Dense(7 ,kernel_initializer='uniform',activation='relu'))
 
 classifier.add(Dense(1 ,kernel_initializer='uniform',activation='sigmoid'))
 
 classifier.compile(optimizer='adam',loss= 'binary_crossentropy', metrics= ['accuracy'])
 
-history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=25)
+history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=45)
 nn_pred=classifier.predict(X_test)
 
 nn_pred=(nn_pred > 0.5)

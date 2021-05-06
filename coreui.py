@@ -58,30 +58,14 @@ class MainWindow:
     def machineCalculate(self,val_duration,val_credit,val_dispIncome,val_residence,val_age,valrad_0to200,valrad_smaller0,valrad_nocheck,valcheck_critical,valcheck_smaller100,valcheck_other,valcheck_housingown):
         import numpy as np
         import pandas as pd
-        # import seaborn as sns
-        # import matplotlib.pyplot as plt
-        # from sklearn.ensemble import RandomForestClassifier
-        # from sklearn.linear_model import LogisticRegression
-        # from sklearn.tree import DecisionTreeClassifier
-        # from sklearn.neighbors import KNeighborsClassifier
-        # from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-        # from sklearn.naive_bayes import GaussianNB
-        # from sklearn.svm import SVC
-        # from xgboost import XGBClassifier
-        # from boruta import BorutaPy
-        # from sklearn.metrics import accuracy_score
         from sklearn.model_selection import train_test_split
-        # KFold,cross_val_score
         from sklearn.preprocessing import StandardScaler
-        # from sklearn.feature_selection import SelectKBest
-        # from sklearn.feature_selection import chi2
         from imblearn.over_sampling import SMOTE
         import keras
         from keras.models import Sequential
         from keras.layers import Dense 
-    
+        from keras.layers.core import Dropout
         
-    
         pd.set_option('display.max_columns', None)
         
         
@@ -99,7 +83,6 @@ class MainWindow:
         df.columns=headers
         df.to_csv("german_data_credit_cat.csv",index=False) #save as csv file
         
-        #for structuring only
         Status_of_existing_checking_account={'A14':"no checking account",'A11':"<0 DM", 'A12': "0 <= <200 DM",'A13':">= 200 DM "}
         df["Status of existing checking account"]=df["Status of existing checking account"].map(Status_of_existing_checking_account)
         
@@ -143,7 +126,7 @@ class MainWindow:
         risk={1:"Good Risk", 2:"Bad Risk"}
         df["Cost Matrix(Risk)"]=df["Cost Matrix(Risk)"].map(risk)
         
-        df = df.sample(frac=1).reset_index(drop=True)
+        #df = df.sample(frac=1).reset_index(drop=True)
         
         #OneHotEncoding
         df_2 = pd.get_dummies(df,drop_first=False)
@@ -180,15 +163,15 @@ class MainWindow:
         #Neural Network
         
         classifier = Sequential()
-        classifier.add(Dense(7 ,kernel_initializer='uniform',activation='relu',input_dim=12))
-        
+        classifier.add(Dense(7 ,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
+        classifier.add(Dropout(0.5))
         classifier.add(Dense(7 ,kernel_initializer='uniform',activation='relu'))
-        
+
         classifier.add(Dense(1 ,kernel_initializer='uniform',activation='sigmoid'))
-        
+
         classifier.compile(optimizer='adam',loss= 'binary_crossentropy', metrics= ['accuracy'])
         
-        classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=25)
+        history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=45)
         nn_pred=classifier.predict(X_test)
         
         nn_pred=(nn_pred > 0.5)
@@ -230,7 +213,7 @@ class MainWindow:
         else:
             valrad_nocheck=0
         
-        ###################################################################☼
+        ###################################################################
         if(self.ui.checkBox_6.isChecked()):
             valcheck_smaller100=1
         else:

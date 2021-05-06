@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -110,13 +109,14 @@ sonar_x_selected = sonar_x[:,[0,1,2,3,4,7,8,10,12,28,48,51]]
 
 
 #Train/Test Split
-x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.33,random_state=0)
+x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.2,random_state=0)
 smt = SMOTE()
 x_train, y_train = smt.fit_sample(x_train, y_train)
 y_train = y_train.astype(int)
 
 x_test, y_test = smt.fit_sample(x_test, y_test)
 y_test = y_test.astype(int)
+
 
 folds = KFold(n_splits = 3, shuffle = False, random_state = 0)
 scores = []
@@ -148,7 +148,7 @@ scores = cross_val_score(rf, sonar_x_selected, sonar_y, cv=3)
 
 print("Avg. cross val score: "+str(scores.mean()))
 
-x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.33,random_state=0)
+
 
 sc=StandardScaler()
 X_train= sc.fit_transform(x_train)
@@ -174,7 +174,7 @@ scoring = 'accuracy'
 
 for name, model in models:
         kfold = KFold(n_splits=3, random_state=seed,shuffle=False)
-        cv_results = cross_val_score(model, X_train, y_train, cv=kfold, scoring=scoring)
+        cv_results = cross_val_score(model, x_train, y_train, cv=kfold, scoring=scoring)
         results.append(cv_results)
         names.append(name)
         msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
@@ -227,9 +227,12 @@ plt.show()
 import keras
 from keras.models import Sequential
 from keras.layers import Dense 
+from keras.layers.core import Dropout
 
 classifier = Sequential()
 classifier.add(Dense(7 ,kernel_initializer='uniform',activation='relu',input_dim=12))
+
+
 
 classifier.add(Dense(7 ,kernel_initializer='uniform',activation='relu'))
 
@@ -238,7 +241,7 @@ classifier.add(Dense(1 ,kernel_initializer='uniform',activation='sigmoid'))
 
 classifier.compile(optimizer='adam',loss= 'binary_crossentropy', metrics= ['accuracy'])
 
-history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=50)
+history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=110)
 nn_pred=classifier.predict(X_test)
 
 nn_pred=(nn_pred > 0.5)
@@ -247,4 +250,6 @@ from sklearn.metrics import confusion_matrix
 cm= confusion_matrix(y_test,nn_pred)
 print(cm)
 
+import collections
 
+collections.Counter(y_train)
