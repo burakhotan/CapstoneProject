@@ -1,5 +1,5 @@
 import sys
-
+import os
 from PyQt5.QtGui import QIntValidator
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QMainWindow
@@ -247,6 +247,7 @@ if __name__ == '__main__':
     main_win=MainWindow()
     main_win.show()
     sys.exit(app.exec_())
+    os.execv(__file__, sys.argv)
     
     
     
