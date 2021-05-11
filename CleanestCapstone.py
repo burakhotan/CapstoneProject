@@ -123,7 +123,7 @@ X_test=sc.fit_transform(x_test)
 classifier = Sequential()
 classifier.add(Dense(7 ,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
 classifier.add(Dropout(0.5))
-classifier.add(Dense(7 ,kernel_initializer='uniform',activation='relu'))
+classifier.add(Dense(7 ,kernel_initializer='uniform',activation='tanh'))
 
 classifier.add(Dense(1 ,kernel_initializer='uniform',activation='sigmoid'))
 

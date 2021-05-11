@@ -190,14 +190,14 @@ plt.show()
 
 #Chi2 Feature Selection
 
-X_new = SelectKBest(chi2, k=12).fit(sonar_x ,sonar_y)
+X_new = SelectKBest(chi2, k=15).fit(sonar_x ,sonar_y)
 
 X_new.scores_
 X_new.get_support()
 
 
 #Selected Features by Chi2
-sonar_x_chiSelected = sonar_x[:,[0,1,4,7,8,10,11,12,15,28,30,46]]
+sonar_x_chiSelected = sonar_x[:,[0,1,4,7,8,10,11,12,15,18,28,30,33,44,46]]
 
 #Train/Test Split
 
