@@ -26,6 +26,11 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import Lasso
 
+from numpy import mean
+from numpy import std
+from sklearn.model_selection import RepeatedStratifiedKFold
+from sklearn.ensemble import StackingClassifier
+
 pd.set_option('display.max_columns', None)
 
 
@@ -128,20 +133,19 @@ X_test=sc.fit_transform(x_test)
 #Neural Network
 
 classifier = Sequential()
-classifier.add(Dense(7 ,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
+classifier.add(Dense(15 ,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
 classifier.add(Dropout(0.5))
-classifier.add(Dense(7 ,kernel_initializer='uniform',activation='relu'))
+classifier.add(Dense(15 ,kernel_initializer='uniform',activation='tanh'))
 
 classifier.add(Dense(1 ,kernel_initializer='uniform',activation='sigmoid'))
 
 classifier.compile(optimizer='adam',loss= 'binary_crossentropy', metrics= ['accuracy'])
 
-history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=5)
+history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=4)
 nn_pred=classifier.predict(X_test)
 
 nn_pred=(nn_pred > 0.5)
 
-from matplotlib import pyplot as plt
 
 plt.figure(figsize=(14,3))
 plt.subplot(1, 2, 1)
@@ -160,3 +164,19 @@ plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper left')
 plt.show()
+
+
+
+level0 = list()
+level0.append(('lr', LogisticRegression()))
+level0.append(('cart', DecisionTreeClassifier()))
+level0.append(('bayes', GaussianNB()))
+# define meta learner model
+level1 = LogisticRegression()
+# define the stacking ensemble
+model = StackingClassifier(estimators=level0, final_estimator=level1, cv=3)
+
+model.fit(X_train, y_train)
+
+
+

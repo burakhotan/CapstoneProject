@@ -21,12 +21,14 @@ import keras
 from keras.models import Sequential
 from keras.layers import Dense 
 from keras.layers.core import Dropout
+
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.linear_model import Lasso
 from numpy import mean
 from numpy import std
 from sklearn.model_selection import RepeatedStratifiedKFold
 from sklearn.ensemble import StackingClassifier
-
-
 
 pd.set_option('display.max_columns', None)
 
@@ -101,12 +103,11 @@ sonar_x = df_2.iloc[:,0:61].values.astype(int)
 sonar_y = df_2.iloc[:,62:].values.ravel().astype(int)
 
 
-#Selected Features by Boruta
-sonar_x_selected = sonar_x[:,[0,1,2,3,4,7,8,10,12,28,48,51]]
 
+sonar_x_selected =sonar_x[:,[0,1,4,7,8,10,11,12,15,18,28,30,33,44,46]]
 
 #Train/Test Split
-x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.2,random_state=0)
+x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.3,random_state=0)
 
 #Dataset Balancing
 smt = SMOTE()
@@ -126,19 +127,18 @@ X_test=sc.fit_transform(x_test)
 #Neural Network
 
 classifier = Sequential()
-classifier.add(Dense(7 ,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
+classifier.add(Dense(8 ,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
 classifier.add(Dropout(0.5))
-classifier.add(Dense(7 ,kernel_initializer='uniform',activation='tanh'))
+classifier.add(Dense(8 ,kernel_initializer='uniform',activation='tanh'))
 
 classifier.add(Dense(1 ,kernel_initializer='uniform',activation='sigmoid'))
 
 classifier.compile(optimizer='adam',loss= 'binary_crossentropy', metrics= ['accuracy'])
 
-history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=40)
+history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=5)
 nn_pred=classifier.predict(X_test)
 
 nn_pred=(nn_pred > 0.5)
-
 
 
 plt.figure(figsize=(14,3))
@@ -158,11 +158,6 @@ plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper left')
 plt.show()
-
-
-#######################################
-
-
 
 level0 = list()
 level0.append(('lr', LogisticRegression()))
