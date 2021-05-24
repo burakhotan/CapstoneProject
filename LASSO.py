@@ -98,7 +98,6 @@ df["Cost Matrix(Risk)"]=df["Cost Matrix(Risk)"].map(risk)
 df_2 = pd.get_dummies(df,drop_first=False)
 
 
-## Feature Selection Boruta
 
 sonar_x = df_2.iloc[:,0:61].values.astype(int)
 sonar_y = df_2.iloc[:,62:].values.ravel().astype(int)
@@ -128,6 +127,38 @@ sc=StandardScaler()
 X_train= sc.fit_transform(x_train)
 X_test=sc.fit_transform(x_test)
 
+
+seed = 0
+
+models = []
+models.append(('LR', LogisticRegression()))
+models.append(('LDA', LinearDiscriminantAnalysis()))
+models.append(('KNN', KNeighborsClassifier()))
+models.append(('DT', DecisionTreeClassifier()))
+models.append(('NB', GaussianNB()))
+models.append(('RF', RandomForestClassifier()))
+models.append(('SVM', SVC(gamma='auto')))
+models.append(('XGB', XGBClassifier()))
+
+# evaluate each model in turn
+results = []
+names = []
+scoring = 'accuracy'
+
+for name, model in models:
+        kfold = KFold(n_splits=3, random_state=seed,shuffle=False)
+        cv_results = cross_val_score(model, X_test, y_test, cv=kfold, scoring=scoring)
+        results.append(cv_results)
+        names.append(name)
+        msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
+        print(msg)
+        
+fig = plt.figure(figsize=(11,6))
+fig.suptitle('Algorithm Comparison')
+ax = fig.add_subplot(111)
+plt.boxplot(results)
+ax.set_xticklabels(names)
+plt.show()
 
 
 #Neural Network
@@ -179,4 +210,48 @@ model = StackingClassifier(estimators=level0, final_estimator=level1, cv=3)
 model.fit(X_train, y_train)
 
 
+def get_stacking():
+	# define the base models
+	level0 = list()
+	level0.append(('lr', LogisticRegression()))
+	level0.append(('knn', KNeighborsClassifier()))
+	level0.append(('cart', DecisionTreeClassifier()))
+	level0.append(('svm', SVC()))
+	level0.append(('bayes', GaussianNB()))
+	# define meta learner model
+	level1 = LogisticRegression()
+	# define the stacking ensemble
+	model = StackingClassifier(estimators=level0, final_estimator=level1, cv=3)
+	return model
+ 
+# get a list of models to evaluate
+def get_models():
+	models = dict()
+	models['lr'] = LogisticRegression()
+	models['knn'] = KNeighborsClassifier()
+	models['cart'] = DecisionTreeClassifier()
+	models['svm'] = SVC()
+	models['bayes'] = GaussianNB()
+	models['stacking'] = get_stacking()
+	return models
+ 
+# evaluate a give model using cross-validation
+def evaluate_model(model, X_train, y_train):
+	cv = RepeatedStratifiedKFold(n_splits=3, n_repeats=3, random_state=1)
+	scores = cross_val_score(model, X_train, y_train, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
+	return scores
 
+# define dataset
+
+# get the models to evaluate
+models = get_models()
+# evaluate the models and store results
+results, names = list(), list()
+for name, model in models.items():
+	scores = evaluate_model(model, X_train, y_train)
+	results.append(scores)
+	names.append(name)
+	print('>%s %.3f (%.3f)' % (name, mean(scores), std(scores)))
+# plot model performance for comparison
+plt.boxplot(results, labels=names, showmeans=True)
+plt.show()

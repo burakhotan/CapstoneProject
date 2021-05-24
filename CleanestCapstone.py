@@ -126,15 +126,15 @@ X_test=sc.fit_transform(x_test)
 #Neural Network
 
 classifier = Sequential()
-classifier.add(Dense(7 ,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
-classifier.add(Dropout(0.5))
-classifier.add(Dense(7 ,kernel_initializer='uniform',activation='tanh'))
+classifier.add(Dense(50 ,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
+classifier.add(Dropout(0.2))
+classifier.add(Dense(50 ,kernel_initializer='uniform',activation='tanh'))
 
 classifier.add(Dense(1 ,kernel_initializer='uniform',activation='sigmoid'))
 
 classifier.compile(optimizer='adam',loss= 'binary_crossentropy', metrics= ['accuracy'])
 
-history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=40)
+history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=25)
 nn_pred=classifier.predict(X_test)
 
 nn_pred=(nn_pred > 0.5)
@@ -174,3 +174,50 @@ level1 = LogisticRegression()
 model = StackingClassifier(estimators=level0, final_estimator=level1, cv=3)
 
 model.fit(X_train, y_train)
+
+
+
+def get_stacking():
+	# define the base models
+	level0 = list()
+	level0.append(('lr', LogisticRegression()))
+	level0.append(('svm', SVC()))
+	level0.append(('rf', RandomForestClassifier()))
+	# define meta learner model
+	level1 = LogisticRegression()
+	# define the stacking ensemble
+	model = StackingClassifier(estimators=level0, final_estimator=level1, cv=3)
+	return model
+ 
+# get a list of models to evaluate
+def get_models():
+	models = dict()
+	models['lr'] = LogisticRegression()
+	models['svm'] = SVC()
+	models['rf'] = RandomForestClassifier()
+	models['stacking'] = get_stacking()
+	return models
+ 
+# evaluate a give model using cross-validation
+def evaluate_model(model, X_test, y_test):
+	cv = RepeatedStratifiedKFold(n_splits=3, n_repeats=3, random_state=0)
+	scores = cross_val_score(model, X_test, y_test, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
+	return scores
+
+# define dataset
+
+# get the models to evaluate
+models = get_models()
+# evaluate the models and store results
+results, names = list(), list()
+for name, model in models.items():
+	scores = evaluate_model(model, X_test, y_test)
+	results.append(scores)
+	names.append(name)
+	print('>%s %.3f (%.3f)' % (name, mean(scores), std(scores)))
+# plot model performance for comparison
+plt.boxplot(results, labels=names, showmeans=True)
+plt.show()
+
+
+

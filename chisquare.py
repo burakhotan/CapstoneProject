@@ -107,7 +107,7 @@ sonar_y = df_2.iloc[:,62:].values.ravel().astype(int)
 sonar_x_selected =sonar_x[:,[0,1,4,7,8,10,11,12,15,18,28,30,33,44,46]]
 
 #Train/Test Split
-x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.3,random_state=0)
+x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.4,random_state=0)
 
 #Dataset Balancing
 smt = SMOTE()
@@ -128,14 +128,14 @@ X_test=sc.fit_transform(x_test)
 
 classifier = Sequential()
 classifier.add(Dense(8 ,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
-classifier.add(Dropout(0.5))
-classifier.add(Dense(8 ,kernel_initializer='uniform',activation='tanh'))
+classifier.add(Dropout(0.7))
+classifier.add(Dense(8 ,kernel_initializer='uniform',activation='relu'))
 
 classifier.add(Dense(1 ,kernel_initializer='uniform',activation='sigmoid'))
 
 classifier.compile(optimizer='adam',loss= 'binary_crossentropy', metrics= ['accuracy'])
 
-history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=5)
+history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=40)
 nn_pred=classifier.predict(X_test)
 
 nn_pred=(nn_pred > 0.5)
@@ -159,6 +159,8 @@ plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper left')
 plt.show()
 
+
+
 level0 = list()
 level0.append(('lr', LogisticRegression()))
 level0.append(('cart', DecisionTreeClassifier()))
@@ -169,3 +171,56 @@ level1 = LogisticRegression()
 model = StackingClassifier(estimators=level0, final_estimator=level1, cv=3)
 
 model.fit(X_train, y_train)
+
+
+
+
+
+def get_stacking():
+	# define the base models
+	level0 = list()
+	level0.append(('lr', LogisticRegression()))
+	level0.append(('knn', KNeighborsClassifier()))
+	level0.append(('cart', DecisionTreeClassifier()))
+	level0.append(('svm', SVC()))
+	level0.append(('bayes', GaussianNB()))
+	# define meta learner model
+	level1 = LogisticRegression()
+	# define the stacking ensemble
+	model = StackingClassifier(estimators=level0, final_estimator=level1, cv=3)
+	return model
+ 
+# get a list of models to evaluate
+def get_models():
+	models = dict()
+	models['lr'] = LogisticRegression()
+	models['knn'] = KNeighborsClassifier()
+	models['cart'] = DecisionTreeClassifier()
+	models['svm'] = SVC()
+	models['bayes'] = GaussianNB()
+	models['stacking'] = get_stacking()
+	return models
+ 
+# evaluate a give model using cross-validation
+def evaluate_model(model, X_train, y_train):
+	cv = RepeatedStratifiedKFold(n_splits=3, n_repeats=3, random_state=0)
+	scores = cross_val_score(model, X_train, y_train, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
+	return scores
+
+# define dataset
+
+# get the models to evaluate
+models = get_models()
+# evaluate the models and store results
+results, names = list(), list()
+for name, model in models.items():
+	scores = evaluate_model(model, X_train, y_train)
+	results.append(scores)
+	names.append(name)
+	print('>%s %.3f (%.3f)' % (name, mean(scores), std(scores)))
+# plot model performance for comparison
+plt.boxplot(results, labels=names, showmeans=True)
+plt.show()
+
+
+

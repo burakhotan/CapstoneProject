@@ -80,7 +80,7 @@ df["foreign worker"]=df["foreign worker"].map(foreign_worker)
 risk={1:"Good Risk", 2:"Bad Risk"}
 df["Cost Matrix(Risk)"]=df["Cost Matrix(Risk)"].map(risk)
 
-df = df.sample(frac=1).reset_index(drop=True)
+#df = df.sample(frac=1).reset_index(drop=True)
 
 #OneHotEncoding
 df_2 = pd.get_dummies(df,drop_first=False)
@@ -118,37 +118,6 @@ x_test, y_test = smt.fit_sample(x_test, y_test)
 y_test = y_test.astype(int)
 
 
-folds = KFold(n_splits = 3, shuffle = False, random_state = 0)
-scores = []
-
-for n_fold, (train_index, valid_index) in enumerate(folds.split(sonar_x_selected,sonar_y)):
-    # print('\n Fold '+ str(n_fold+1 ) + 
-    #       ' \n\n train ids :' +  str(train_index) +
-    #       ' \n\n validation ids :' +  str(valid_index))
-    
-    x_train, x_valid = sonar_x_selected[train_index], sonar_x_selected[valid_index]
-    y_train, y_valid = sonar_y[train_index], sonar_y[valid_index]
-    
-    rf.fit(x_train, y_train)
-    y_pred = rf.predict(x_valid)
-    
-    
-    acc_score = accuracy_score(y_pred, y_valid)
-    scores.append(acc_score)
-    print('\n Accuracy score for Fold ' +str(n_fold+1) + ' --> ' + str(acc_score)+'\n')
-
-    
-print(scores)
-print('Avg. accuracy score :' + str(np.mean(scores)))
-
-
-
-
-scores = cross_val_score(rf, sonar_x_selected, sonar_y, cv=3)
-
-print("Avg. cross val score: "+str(scores.mean()))
-
-
 
 sc=StandardScaler()
 X_train= sc.fit_transform(x_train)
@@ -174,7 +143,7 @@ scoring = 'accuracy'
 
 for name, model in models:
         kfold = KFold(n_splits=3, random_state=seed,shuffle=False)
-        cv_results = cross_val_score(model, x_train, y_train, cv=kfold, scoring=scoring)
+        cv_results = cross_val_score(model, X_test, y_test, cv=kfold, scoring=scoring)
         results.append(cv_results)
         names.append(name)
         msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
@@ -203,11 +172,23 @@ sonar_x_chiSelected = sonar_x[:,[0,1,4,7,8,10,11,12,15,18,28,30,33,44,46]]
 
 xchi_train,xchi_test,ychi_train,ychi_test=train_test_split(sonar_x_chiSelected,sonar_y,test_size=0.33,random_state=0)
 
+smt = SMOTE()
+xchi_train, ychi_train = smt.fit_sample(xchi_train, ychi_train)
+ychi_train = ychi_train.astype(int)
+
+xchi_test, ychi_test = smt.fit_sample(xchi_test, ychi_test)
+ychi_test = ychi_test.astype(int)
+
+
+
+sc=StandardScaler()
+Xchi_train= sc.fit_transform(xchi_train)
+Xchi_test=sc.fit_transform(xchi_test)
 
 
 for name, model in models:
         kfold = KFold(n_splits=3, random_state=seed,shuffle=False)
-        cv_results = cross_val_score(model, xchi_train, ychi_train, cv=kfold, scoring=scoring)
+        cv_results = cross_val_score(model, Xchi_test, ychi_test, cv=kfold, scoring=scoring)
         results.append(cv_results)
         names.append(name)
         msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'sonHalSon1.ui'
+# Form implementation generated from reading ui file 'sonHalSon2.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -511,7 +511,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -522,7 +522,7 @@ class Ui_MainWindow(object):
         self.radioButton_3.setText(_translate("MainWindow", "Chi-Square"))
         self.radioButton_2.setText(_translate("MainWindow", "Lasso"))
         self.label_2.setText(_translate("MainWindow", "ML Algorithms"))
-        self.radioButton_6.setText(_translate("MainWindow", "Random Forest"))
+        self.radioButton_6.setText(_translate("MainWindow", "Ensemble Learning"))
         self.radioButton_5.setText(_translate("MainWindow", "Neural Networks (Proposed)"))
         self.label_13.setText(_translate("MainWindow", "Age"))
         self.label_14.setText(_translate("MainWindow", "Duration in month"))
