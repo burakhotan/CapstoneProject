@@ -180,10 +180,8 @@ def get_stacking():
 	# define the base models
 	level0 = list()
 	level0.append(('lr', LogisticRegression()))
-	level0.append(('knn', KNeighborsClassifier()))
-	level0.append(('cart', DecisionTreeClassifier()))
 	level0.append(('svm', SVC()))
-	level0.append(('bayes', GaussianNB()))
+	level0.append(('rf', RandomForestClassifier()))
 	# define meta learner model
 	level1 = LogisticRegression()
 	# define the stacking ensemble
@@ -194,17 +192,15 @@ def get_stacking():
 def get_models():
 	models = dict()
 	models['lr'] = LogisticRegression()
-	models['knn'] = KNeighborsClassifier()
-	models['cart'] = DecisionTreeClassifier()
 	models['svm'] = SVC()
-	models['bayes'] = GaussianNB()
+	models['rf'] = RandomForestClassifier()
 	models['stacking'] = get_stacking()
 	return models
  
 # evaluate a give model using cross-validation
 def evaluate_model(model, X_train, y_train):
 	cv = RepeatedStratifiedKFold(n_splits=3, n_repeats=3, random_state=0)
-	scores = cross_val_score(model, X_train, y_train, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
+	scores = cross_val_score(model, X_test, y_test, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
 	return scores
 
 # define dataset
@@ -214,7 +210,7 @@ models = get_models()
 # evaluate the models and store results
 results, names = list(), list()
 for name, model in models.items():
-	scores = evaluate_model(model, X_train, y_train)
+	scores = evaluate_model(model, X_test, y_test)
 	results.append(scores)
 	names.append(name)
 	print('>%s %.3f (%.3f)' % (name, mean(scores), std(scores)))

@@ -112,7 +112,7 @@ sonar_y = df_2.iloc[:,62:].values.ravel().astype(int)
 sonar_x_selected =sonar_x[:,[0,1,2,3,4,5,6,8,10,12,14,18,23,28,30,31,32,34,36,39,42,43,44,45,48,51,54,56,57,58,60]]
 
 #Train/Test Split
-x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.3,random_state=0)
+x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.4,random_state=0)
 
 #Dataset Balancing
 smt = SMOTE()
@@ -214,10 +214,8 @@ def get_stacking():
 	# define the base models
 	level0 = list()
 	level0.append(('lr', LogisticRegression()))
-	level0.append(('knn', KNeighborsClassifier()))
-	level0.append(('cart', DecisionTreeClassifier()))
 	level0.append(('svm', SVC()))
-	level0.append(('bayes', GaussianNB()))
+	level0.append(('rf', RandomForestClassifier()))
 	# define meta learner model
 	level1 = LogisticRegression()
 	# define the stacking ensemble
@@ -228,10 +226,8 @@ def get_stacking():
 def get_models():
 	models = dict()
 	models['lr'] = LogisticRegression()
-	models['knn'] = KNeighborsClassifier()
-	models['cart'] = DecisionTreeClassifier()
 	models['svm'] = SVC()
-	models['bayes'] = GaussianNB()
+	models['rf'] = RandomForestClassifier()
 	models['stacking'] = get_stacking()
 	return models
  

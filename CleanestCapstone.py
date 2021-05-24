@@ -199,9 +199,9 @@ def get_models():
 	return models
  
 # evaluate a give model using cross-validation
-def evaluate_model(model, X_test, y_test):
+def evaluate_model(model, X_train, y_train):
 	cv = RepeatedStratifiedKFold(n_splits=3, n_repeats=3, random_state=0)
-	scores = cross_val_score(model, X_test, y_test, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
+	scores = cross_val_score(model, X_train, y_train, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
 	return scores
 
 # define dataset
@@ -211,7 +211,7 @@ models = get_models()
 # evaluate the models and store results
 results, names = list(), list()
 for name, model in models.items():
-	scores = evaluate_model(model, X_test, y_test)
+	scores = evaluate_model(model, X_train, y_train)
 	results.append(scores)
 	names.append(name)
 	print('>%s %.3f (%.3f)' % (name, mean(scores), std(scores)))
