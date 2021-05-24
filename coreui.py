@@ -176,7 +176,7 @@ class MainWindow:
         sonar_x_selected =sonar_x[:,[0,1,2,3,4,5,6,8,10,12,14,18,23,28,30,31,32,34,36,39,42,43,44,45,48,51,54,56,57,58,60]]
         
         #Train/Test Split
-        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.3,random_state=0)
+        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.6,random_state=0)
         
         #Dataset Balancing
         smt = SMOTE()
@@ -198,7 +198,7 @@ class MainWindow:
         # define meta learner model
         level1 = LogisticRegression()
         # define the stacking ensemble
-        model = StackingClassifier(estimators=level0, final_estimator=level1, cv=3)
+        model = StackingClassifier(estimators=level0, final_estimator=level1, cv=5)
         
         model.fit(X_train, y_train)
 
@@ -308,7 +308,7 @@ class MainWindow:
         
         
         #Train/Test Split
-        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.2,random_state=0)
+        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.3,random_state=0)
         
         #Dataset Balancing
         smt = SMOTE()
@@ -330,7 +330,7 @@ class MainWindow:
         # define meta learner model
         level1 = LogisticRegression()
         # define the stacking ensemble
-        model = StackingClassifier(estimators=level0, final_estimator=level1, cv=3)
+        model = StackingClassifier(estimators=level0, final_estimator=level1, cv=5)
         
         model.fit(X_train, y_train)
         
@@ -438,7 +438,7 @@ class MainWindow:
         sonar_x_selected =sonar_x[:,[0,1,4,7,8,10,11,12,15,18,28,30,33,44,46]]
         
         #Train/Test Split
-        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.4,random_state=0)
+        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.55,random_state=0)
         
         #Dataset Balancing
         smt = SMOTE()
@@ -460,7 +460,7 @@ class MainWindow:
         # define meta learner model
         level1 = LogisticRegression()
         # define the stacking ensemble
-        model = StackingClassifier(estimators=level0, final_estimator=level1, cv=3)
+        model = StackingClassifier(estimators=level0, final_estimator=level1, cv=5)
         
         model.fit(X_train, y_train)
         
@@ -565,7 +565,7 @@ class MainWindow:
         sonar_x_selected =sonar_x[:,[0,1,2,3,4,5,6,8,10,12,14,18,23,28,30,31,32,34,36,39,42,43,44,45,48,51,54,56,57,58,60]]
         
         #Train/Test Split
-        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.3,random_state=0)
+        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.5,random_state=0)
         
         #Dataset Balancing
         smt = SMOTE()
@@ -581,15 +581,15 @@ class MainWindow:
         X_test=sc.fit_transform(x_test)
         
         classifier = Sequential()
-        classifier.add(Dense(15 ,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
-        classifier.add(Dropout(0.5))
+        classifier.add(Dense(15,kernel_initializer='uniform',activation='tanh',input_dim=X_train.shape[1]))
+        classifier.add(Dropout(0.7))
         classifier.add(Dense(15 ,kernel_initializer='uniform',activation='tanh'))
         
         classifier.add(Dense(1 ,kernel_initializer='uniform',activation='sigmoid'))
         
         classifier.compile(optimizer='adam',loss= 'binary_crossentropy', metrics= ['accuracy'])
         
-        history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=4)
+        history=classifier.fit(X_train,y_train,validation_data=(X_test, y_test),epochs=5)
         nn_pred=classifier.predict(X_test)
         
         nn_pred=(nn_pred > 0.5)
@@ -696,7 +696,7 @@ class MainWindow:
         sonar_x_selected =sonar_x[:,[0,1,4,7,8,10,11,12,15,18,28,30,33,44,46]]
         
         #Train/Test Split
-        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.4,random_state=0)
+        x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.55,random_state=0)
         
         #Dataset Balancing
         smt = SMOTE()

@@ -106,7 +106,7 @@ sonar_x_selected = sonar_x[:,[0,1,2,3,4,7,8,10,12,28,48,51]]
 
 
 #Train/Test Split
-x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.2,random_state=0)
+x_train,x_test,y_train,y_test=train_test_split(sonar_x_selected,sonar_y,test_size=0.3,random_state=0)
 
 #Dataset Balancing
 smt = SMOTE()
@@ -186,7 +186,7 @@ def get_stacking():
 	# define meta learner model
 	level1 = LogisticRegression()
 	# define the stacking ensemble
-	model = StackingClassifier(estimators=level0, final_estimator=level1, cv=3)
+	model = StackingClassifier(estimators=level0, final_estimator=level1, cv=5)
 	return model
  
 # get a list of models to evaluate
@@ -200,7 +200,7 @@ def get_models():
  
 # evaluate a give model using cross-validation
 def evaluate_model(model, X_train, y_train):
-	cv = RepeatedStratifiedKFold(n_splits=3, n_repeats=3, random_state=0)
+	cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=3, random_state=0)
 	scores = cross_val_score(model, X_train, y_train, scoring='accuracy', cv=cv, n_jobs=-1, error_score='raise')
 	return scores
 
