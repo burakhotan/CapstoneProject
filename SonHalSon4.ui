@@ -266,7 +266,7 @@ background-color:transparent</string>
 background-color:transparent</string>
       </property>
       <property name="text">
-       <string>Neural Networks (Proposed)</string>
+       <string>Neural Networks </string>
       </property>
      </widget>
     </widget>
@@ -284,7 +284,7 @@ background-color:transparent</string>
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="chi_widget">
      <widget class="QLabel" name="label_13">
@@ -296,6 +296,12 @@ background-color:transparent</string>
         <height>16</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="text">
        <string>Age</string>
       </property>
@@ -305,9 +311,15 @@ background-color:transparent</string>
        <rect>
         <x>50</x>
         <y>80</y>
-        <width>111</width>
+        <width>121</width>
         <height>16</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
       </property>
       <property name="text">
        <string>Duration in month</string>
@@ -321,6 +333,12 @@ background-color:transparent</string>
         <width>91</width>
         <height>16</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
       </property>
       <property name="text">
        <string>Credit amount</string>
@@ -361,7 +379,7 @@ background-color:transparent</string>
        <rect>
         <x>20</x>
         <y>230</y>
-        <width>201</width>
+        <width>232</width>
         <height>131</height>
        </rect>
       </property>
@@ -393,10 +411,16 @@ background-color:transparent</string>
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>190</y>
-        <width>211</width>
+        <y>210</y>
+        <width>231</width>
         <height>16</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="text">
        <string>Status of existing checking account</string>
@@ -405,11 +429,17 @@ background-color:transparent</string>
      <widget class="QLabel" name="label_17">
       <property name="geometry">
        <rect>
-        <x>360</x>
-        <y>190</y>
+        <x>370</x>
+        <y>210</y>
         <width>91</width>
         <height>16</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="text">
        <string>Credit History</string>
@@ -452,10 +482,16 @@ background-color:transparent</string>
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>390</y>
+        <y>410</y>
         <width>201</width>
         <height>16</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="text">
        <string>Savings account/bonds</string>
@@ -495,6 +531,12 @@ background-color:transparent</string>
         <width>141</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
       </property>
       <property name="text">
        <string>Purpose = car(used)</string>

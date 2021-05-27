@@ -3,7 +3,7 @@ import os
 from PyQt5.QtGui import QIntValidator
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QMainWindow
-from sonHalSon2 import Ui_MainWindow
+from sonHalSon4 import Ui_MainWindow
 
 class MainWindow:
     def __init__(self):
@@ -24,10 +24,17 @@ class MainWindow:
         self.ui.lineEdit_2.setValidator(QIntValidator())
         self.ui.lineEdit_3.setValidator(QIntValidator())
         self.ui.lineEdit_4.setValidator(QIntValidator())
-
         self.ui.lineEdit_5.setValidator(QIntValidator())
-        
-
+        self.ui.lineEdit_age.setValidator(QIntValidator())
+        self.ui.lineEdit_duration.setValidator(QIntValidator())
+        self.ui.lineEdit_amount.setValidator(QIntValidator())
+        self.ui.lineEdit_12.setValidator(QIntValidator())
+        self.ui.lineEdit_9.setValidator(QIntValidator())
+        self.ui.lineEdit_11.setValidator(QIntValidator())
+        self.ui.lineEdit_10.setValidator(QIntValidator())
+        self.ui.lineEdit_8.setValidator(QIntValidator())
+        self.ui.lineEdit_7.setValidator(QIntValidator())
+        self.ui.lineEdit_6.setValidator(QIntValidator())
 
     def show(self):
         self.main_win.show()
