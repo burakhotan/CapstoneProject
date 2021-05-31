@@ -544,7 +544,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Credit Scoring"))
         self.label.setText(_translate("MainWindow", "Feature Selection Algorithms"))
         self.radioButton_4.setText(_translate("MainWindow", "Boruta"))
         self.radioButton_3.setText(_translate("MainWindow", "Chi-Square"))

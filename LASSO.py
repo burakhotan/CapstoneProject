@@ -102,12 +102,12 @@ df_2 = pd.get_dummies(df,drop_first=False)
 sonar_x = df_2.iloc[:,0:61].values.astype(int)
 sonar_y = df_2.iloc[:,62:].values.ravel().astype(int)
 
-# from sklearn.feature_selection import SelectFromModel
+from sklearn.feature_selection import SelectFromModel
 
-# selection = SelectFromModel(LogisticRegression(C=1, penalty='l1',solver='saga'))
+selection = SelectFromModel(LogisticRegression(C=1, penalty='l1',solver='saga'))
 
-# selection.fit(sonar_x, sonar_y)
-# selection.get_support()
+selection.fit(sonar_x, sonar_y)
+selection.get_support()
 
 sonar_x_selected =sonar_x[:,[0,1,2,3,4,5,6,8,10,12,14,18,23,28,30,31,32,34,36,39,42,43,44,45,48,51,54,56,57,58,60]]
 
